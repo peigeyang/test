@@ -5,12 +5,11 @@ import java.awt.event.*;
 
 public class TankFrame extends Frame {
 
-    boolean bL = false;
-    boolean bU = false;
-    boolean bR = false;
-    boolean bD = false;
 
+    final int SPEED = 10;
     int x = 200 , y = 200;
+    Dir dir = Dir.DOWN;
+
     public TankFrame() throws HeadlessException {
         setSize(800,600);
         //sizable 设置大小
@@ -34,10 +33,27 @@ public class TankFrame extends Frame {
         g.fillRect(x,y,20,40);
         //x += 10;
         //y += 10;
+        switch (dir){
+            case LEFT:
+                x-=SPEED;
+                break;
+            case RIGHT:
+                x+=SPEED;
+                break;
+            case DOWN:
+                y+=SPEED;
+                break;
+            case UP:
+                y-=SPEED;
+                break;
+        }
     }
 
     class MyKeyListener extends KeyAdapter {
-
+        boolean bL = false;
+        boolean bU = false;
+        boolean bR = false;
+        boolean bD = false;
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -58,15 +74,36 @@ public class TankFrame extends Frame {
                     bD = true;
                     break;
             }
-            repaint();
+            //repaint();
+            setMainTankDir();
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            bL = false;
-            bU = false;
-            bR = false;
-            bD = false;
+            int key = e.getKeyCode();
+            switch (key){
+                case KeyEvent.VK_LEFT:
+                    bL = false;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    bR = false;
+                    break;
+                case KeyEvent.VK_UP:
+                    bU = false;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    bD = false;
+                    break;
+            }
+            setMainTankDir();
+        }
+        private void setMainTankDir() {
+            if(bL) dir = Dir.LEFT;
+            if(bU) dir = Dir.UP;
+            if(bR) dir = Dir.RIGHT;
+            if(bD) dir = Dir.DOWN;
         }
     }
+
+
 }
